@@ -1,0 +1,67 @@
+import pandas as pd
+from sqlalchemy import create_engine
+import pyodbc
+
+# Database credentials
+driver = '{ODBC Driver 17 for SQL Server}'
+server1 = 'LAPTOP-ALOSMCSV' 
+database1 = 'AdventureWorks2022;'
+
+server2 = 'LAPTOP-ALOSMCSV' 
+database2 = 'AdventureWorksDW2019;'
+
+# Connect SQL Server Management Studio to Python
+conn = pyodbc.connect('DRIVER=' + driver + ';SERVER=' + server1 + '\SQLEXPRESS' + ';DATABASE=' + database1 + ';SERVER=' + server2 + '\SQLEXPRESS' +';DATABASE=' + database2 + ';Trusted_Connection=yes;')
+cursor = conn.cursor() 
+
+# Extract data from AdventureWorks2022
+print("Show Data 1: \n")
+sql_query1 = "SELECT TOP (1000) [Name],[ModifiedDate] FROM [AdventureWorks2022].[Person].[ContactType]"
+cursor.execute(sql_query1)
+for row in cursor:
+    print(row)
+
+results1 = cursor.fetchall()
+df1 = pd.DataFrame(results1)
+
+# Extract data from AdventureWorks2022
+print("Show Final Data 1: \n")
+delete_null = "SELECT TOP (1000) [Name],CONVERT(varchar(10), CAST([ModifiedDate] AS DATE), 120) AS ModifiedDate FROM [AdventureWorks2022].[Person].[ContactType]"
+cursor.execute(delete_null)
+for row in cursor:
+    print(row)
+
+final_results1 = cursor.fetchall()
+df1_final = pd.DataFrame(final_results1)
+
+# Extract data from AdventureWorksDW2019
+print("Show Data 2: \n")
+sql_query2 = "SELECT TOP (1000) [EnglishProductSubcategoryName],[SpanishProductSubcategoryName],[FrenchProductSubcategoryName] FROM [AdventureWorksDW2019].[dbo].[DimProductSubcategory]"  
+cursor.execute(sql_query2) 
+for row in cursor:
+    print(row)
+
+results2 = cursor.fetchall()
+df2 = pd.DataFrame(results2)
+
+#Transform to dataframe
+import traceback
+
+try:
+    df = pd.concat([df1_final, df2])
+    
+    # Environment PG
+    pg_user = "etl"
+    pg_pass = "etlpipe"
+    pg_db = "etlpipe_db"
+    
+    # Create SQLAlchemy engine to connect to PostgreSQL
+    engine = create_engine(f'postgresql://{pg_user}:{pg_pass}@localhost:5432//{pg_db}')
+    
+    # Load the DataFrame into PostgreSQL
+    df.to_sql('my_table', engine, if_exists='replace', index=False) 
+
+    print("Data loaded into PostgreSQL")
+except Exception as e:
+    print("An error occurred:", e)
+    traceback.print_exc()
