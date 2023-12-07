@@ -20,3 +20,5 @@ Finally in the load phase I add both of these cleaned data sources into the targ
 
 You can download AdventureWorks data at 
 https://learn.microsoft.com/id-id/sql/samples/adventureworks-install-configure?view=sql-server-ver16&tabs=ssms
+
+Thank you
