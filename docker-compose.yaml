@@ -1,0 +1,26 @@
+version: "latest"
+services:
+  db:
+    image: 8a0aecdbe3e96f12ab9a638110d0dcaf2c94ea241d29df1b02f89fd988d9bd54
+    container_name: local_pgdb
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: etl
+      POSTGRES_PASSWORD: etlpipe
+      POSTGRES_DB: etlpipe_db
+    volumes:
+      - D:\postgres_db:/var/lib/postgresql/data
+  pgadmin:
+    image: da73a5b9ac16dddbf6b089c678cb9d9fc12c135cb238b4021ab80b81369a523b
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: myetlpipeline1@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: firstetlpipe
+    volumes:
+      - D:\pgadmin_data:/var/lib/pgadmin
+
