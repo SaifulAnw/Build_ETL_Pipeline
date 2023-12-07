@@ -18,4 +18,5 @@ Finally in the load phase I add both of these cleaned data sources into the targ
 
 <img width="960" alt="Screenshot 2023-12-08 035320" src="https://github.com/saifulanwar30/Build_ETL_Pipeline/assets/117976868/ed8d824f-fd4f-464b-bbca-239f8082ca14">
 
-You can download AdventureWorks data at https://learn.microsoft.com/id-id/sql/samples/adventureworks-install-configure?view=sql-server-ver16&tabs=ssms
+You can download AdventureWorks data at 
+https://learn.microsoft.com/id-id/sql/samples/adventureworks-install-configure?view=sql-server-ver16&tabs=ssms
